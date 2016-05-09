@@ -159,18 +159,26 @@ class ExporterXCode extends Exporter {
 		}
 
 		if (platform === Platform.iOS) {
+			icons.push(new IconImage('iphone', 29, 1));
 			icons.push(new IconImage('iphone', 29, 2));
-			icons.push(new IconImage('iphone', 29, 3));
-			icons.push(new IconImage('iphone', 40, 2));
-			icons.push(new IconImage('iphone', 40, 3));
-			icons.push(new IconImage('iphone', 60, 2));
-			icons.push(new IconImage('iphone', 60, 3));
-			icons.push(new IconImage('ipad', 29, 1));
-			icons.push(new IconImage('ipad', 29, 2));
-			icons.push(new IconImage('ipad', 40, 1));
-			icons.push(new IconImage('ipad', 40, 2));
-			icons.push(new IconImage('ipad', 76, 1));
-			icons.push(new IconImage('ipad', 76, 2));
+    		icons.push(new IconImage('iphone', 29, 3));
+    		icons.push(new IconImage('iphone', 40, 2));
+    		icons.push(new IconImage('iphone', 40, 3));
+    		icons.push(new IconImage('iphone', 57, 1));
+    		icons.push(new IconImage('iphone', 57, 2));
+    		icons.push(new IconImage('iphone', 60, 2));
+    		icons.push(new IconImage('iphone', 60, 3));
+    		icons.push(new IconImage('ipad', 29, 1));
+    		icons.push(new IconImage('ipad', 29, 2));
+    		icons.push(new IconImage('ipad', 40, 1));
+    		icons.push(new IconImage('ipad', 40, 2));
+    		icons.push(new IconImage('ipad', 50, 1));
+    		icons.push(new IconImage('ipad', 50, 2));
+    		icons.push(new IconImage('ipad', 72, 1));
+    		icons.push(new IconImage('ipad', 72, 2));
+    		icons.push(new IconImage('ipad', 76, 1));
+    		icons.push(new IconImage('ipad', 76, 2));
+    		icons.push(new IconImage('ipad', 83.5, 2));
 		}
 		else {
 			icons.push(new IconImage('mac', 16, 1));
@@ -213,6 +221,78 @@ class ExporterXCode extends Exporter {
 		for (let i = 0; i < icons.length; ++i) {
 			const icon = icons[i];
 			Icon.exportPng(to.resolve(Paths.get('Images.xcassets', 'AppIcon.appiconset', icon.idiom + icon.scale + 'x' + icon.size + '.png')), icon.size * icon.scale, icon.size * icon.scale, undefined, from);
+		}
+
+
+		if (platform === Platform.iOS) {
+			let launchImages = [];
+
+			class LaunchImage {
+				constructor(idiom, w, h, scale, subtype, orientation, extent, sysversion) {
+					this.idiom = idiom;
+					this.w = w;
+					this.h = h;
+					this.scale = scale;
+					this.subtype = subtype;
+					this.orientation = orientation;
+					this.extent = extent;
+					this.sysversion = sysversion;
+				}
+			}
+
+			launchImages.push(new LaunchImage('iphone', 414 * 3, 736 * 3, 3, '736h',    'portrait',  'full-screen',   '8.0'));
+			launchImages.push(new LaunchImage('iphone', 736 * 3, 414 * 3, 3, '736h',    'landscape', 'full-screen',   '8.0'));
+			launchImages.push(new LaunchImage('iphone', 375 * 2, 667 * 2, 2, '667h',    'portrait',  'full-screen',   '8.0'));
+			launchImages.push(new LaunchImage('iphone', 640, 960, 2, undefined, 'portrait',  'full-screen',   '7.0'));
+			launchImages.push(new LaunchImage('iphone', 640, 1136, 2, 'retina4', 'portrait',  'full-screen',   '7.0'));
+			launchImages.push(new LaunchImage('ipad',   768, 1024, 1, undefined, 'portrait',  'full-screen',   '7.0'));
+			launchImages.push(new LaunchImage('ipad',   1024, 768, 1, undefined, 'landscape', 'full-screen',   '7.0'));
+			launchImages.push(new LaunchImage('ipad',   1536, 2048, 2, undefined, 'portrait',  'full-screen',   '7.0'));
+			launchImages.push(new LaunchImage('ipad',   2048, 1536, 2, undefined, 'landscape', 'full-screen',   '7.0'));
+			launchImages.push(new LaunchImage('iphone', 320, 480, 1, undefined, 'portrait',  'full-screen',   undefined));
+			launchImages.push(new LaunchImage('iphone', 640, 960, 2, undefined, 'portrait',  'full-screen',   undefined));
+			launchImages.push(new LaunchImage('iphone', 640, 1136, 2, 'retina4', 'portrait',  'full-screen',   undefined));
+			launchImages.push(new LaunchImage('ipad',   768, 1004, 1, undefined, 'portrait',  'to-status-bar', undefined));
+			launchImages.push(new LaunchImage('ipad',   768, 1024, 1, undefined, 'portrait',  'full-screen',   undefined));
+			launchImages.push(new LaunchImage('ipad',   1024, 748, 1, undefined, 'landscape', 'to-status-bar', undefined));
+			launchImages.push(new LaunchImage('ipad',   1024, 768, 1, undefined, 'landscape', 'full-screen',   undefined));
+			launchImages.push(new LaunchImage('ipad',   1536, 2008, 2, undefined, 'portrait',  'to-status-bar', undefined));
+			launchImages.push(new LaunchImage('ipad',   1536, 2048, 2, undefined, 'portrait',  'full-screen',   undefined));
+			launchImages.push(new LaunchImage('ipad',   2048, 1496, 2, undefined, 'landscape', 'to-status-bar', undefined));
+			launchImages.push(new LaunchImage('ipad',   2048, 1536, 2, undefined, 'landscape', 'full-screen',   undefined));
+    
+			const imagesdir = to.resolve(Paths.get('Images.xcassets', 'LaunchImage.launchimage'));
+			if (!Files.exists(imagesdir)) Files.createDirectories(imagesdir);
+
+			this.writeFile(to.resolve(Paths.get('Images.xcassets', 'LaunchImage.launchimage', 'Contents.json')));
+			this.p('{');
+			this.p('"images" : [', 1);
+			for (let i = 0; i < launchImages.length; ++i) {
+				const icon = launchImages[i];
+				this.p('{', 2);
+				this.p('"idiom" : "' + icon.idiom + '",', 3);
+				this.p('"filename" : "' + i + '.png",', 3);
+				this.p('"scale" : "' + icon.scale + 'x",', 3);
+				if (icon.subtype) this.p('"subtype" : "' + icon.subtype + '",', 3);
+				if (icon.sysversion) this.p('"minimum-system-version" : "' + icon.sysversion + '",', 3);
+				this.p('"extent" : "' + icon.extent + '",', 3);
+				this.p('"orientation" : "' + icon.orientation + '"', 3);
+				if (i == launchImages.length - 1) this.p('}', 2);
+				else this.p('},', 2);
+			}
+			this.p('],', 1);
+			this.p('"info" : {', 1);
+			this.p('"version" : 1,', 2);
+			this.p('"author" : "xcode"', 2);
+			this.p('}', 1);
+			this.p('}');
+			this.closeFile();
+
+			const black = 0xff;
+			for (let i = 0; i < launchImages.length; ++i) {
+				const icon = launchImages[i];
+				Icon.exportPng(to.resolve(Paths.get('Images.xcassets', 'LaunchImage.launchimage', i + '.png')), icon.w, icon.h, black, from);
+			}
 		}
 
 		let project = solution.getProjects()[0];
