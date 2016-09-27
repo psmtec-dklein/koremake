@@ -275,10 +275,10 @@ async function exportKoremakeProject(from: string, to: string, platform: string,
 
 	exporter.exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
 
-	//if (options.cmake) {
+	if (options.cmake_export) {
 		console.log('Exporting CMake project files.');
 		new CMakeExporter().exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
-	//}
+	}
 	
 	return project;
 }

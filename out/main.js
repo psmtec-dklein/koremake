@@ -271,10 +271,10 @@ function exportKoremakeProject(from, to, platform, options) {
             throw 'No exporter found for platform ' + platform + '.';
         }
         exporter.exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
-        //if (options.cmake) {
-        console.log('Exporting CMake project files.');
-        new CMakeExporter_1.CMakeExporter().exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
-        //}
+        if (options.cmake_export) {
+            console.log('Exporting CMake project files.');
+            new CMakeExporter_1.CMakeExporter().exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
+        }
         return project;
     });
 }
@@ -282,7 +282,7 @@ function isKoremakeProject(directory) {
     return fs.existsSync(path.resolve(directory, 'korefile.js'));
 }
 function exportProject(from, to, platform, options) {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         if (isKoremakeProject(from)) {
             return exportKoremakeProject(from, to, platform, options);
         }
@@ -328,7 +328,7 @@ function compileProject(make, project, solutionName, options) {
 }
 exports.api = 2;
 function run(options, loglog) {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         log.set(loglog);
         if (options.graphics !== undefined) {
             Options_1.Options.graphicsApi = options.graphics;

@@ -92,8 +92,8 @@ let options = [
         value: false
     },
     {
-        full: 'cmake',
-        description: 'export CMake file',
+        full: 'cmake_export',
+        description: 'Export CMake build files',
         value: true
     }
 ];
