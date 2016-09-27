@@ -17,6 +17,7 @@ const Project_1 = require('./Project');
 const Platform_1 = require('./Platform');
 const exec = require('./exec');
 const AndroidExporter_1 = require('./Exporters/AndroidExporter');
+const CMakeExporter_1 = require('./Exporters/CMakeExporter');
 const CodeBlocksExporter_1 = require('./Exporters/CodeBlocksExporter');
 const MakefileExporter_1 = require('./Exporters/MakefileExporter');
 const EmscriptenExporter_1 = require('./Exporters/EmscriptenExporter');
@@ -270,6 +271,10 @@ function exportKoremakeProject(from, to, platform, options) {
             throw 'No exporter found for platform ' + platform + '.';
         }
         exporter.exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
+        //if (options.cmake) {
+        console.log('Exporting CMake project files.');
+        new CMakeExporter_1.CMakeExporter().exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
+        //}
         return project;
     });
 }
