@@ -53,6 +53,9 @@ export class CMakeExporter extends Exporter {
 			    this.p('target_compile_definitions(' + pn + ' PUBLIC -D_WINSOCK_DEPRECATED_NO_WARNINGS -DWIN32 -D_WINDOWS)');
 			    this.p('target_compile_definitions(' + pn + ' PRIVATE -DUNICODE -D_UNICODE)');				
 			}
+			case Platform.Linux: {
+				this.p('target_link_libraries(' + pn + ' pthread)');
+			}
 		}
 		
 		for (let def of project.getDefines()) {
