@@ -11,6 +11,7 @@ import * as exec from './exec';
 import {VisualStudioVersion} from './VisualStudioVersion';
 import {Exporter} from './Exporters/Exporter';
 import {AndroidExporter} from './Exporters/AndroidExporter';
+import {CMakeExporter} from './Exporters/CMakeExporter';
 import {CodeBlocksExporter} from './Exporters/CodeBlocksExporter';
 import {MakefileExporter} from './Exporters/MakefileExporter';
 import {EmscriptenExporter} from './Exporters/EmscriptenExporter';
@@ -274,6 +275,11 @@ async function exportKoremakeProject(from: string, to: string, platform: string,
 
 	exporter.exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
 
+	//if (options.cmake) {
+		console.log('Exporting CMake project files.');
+		new CMakeExporter().exportSolution(project, from, to, platform, options.vrApi, options.nokrafix, options);
+	//}
+	
 	return project;
 }
 
