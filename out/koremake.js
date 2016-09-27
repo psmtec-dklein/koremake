@@ -90,6 +90,11 @@ let options = [
         full: 'debug',
         description: 'Compile in debug mode',
         value: false
+    },
+    {
+        full: 'cmake',
+        description: 'export CMake file',
+        value: true
     }
 ];
 let parsedOptions = {};
