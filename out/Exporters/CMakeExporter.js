@@ -38,26 +38,26 @@ class CMakeExporter extends Exporter_1.Exporter {
         this.p('add_executable(' + pn + executableTag + sources.join(' ') + ')');
         for (let inc of project.getIncludeDirs()) {
             // (DK) it seems cmake requires forward slashes even on windows
-            this.p(this.forProject(pn, 'target_include_directories(_PID_ PUBLIC ' + path.resolve(from, inc).replace(/\\/g, '/') + ')'));
+            this.p(this.forProject(pn, 'target_include_directories(_PID_ PRIVATE ' + path.resolve(from, inc).replace(/\\/g, '/') + ')'));
         }
         // compiler options
         if (project.cpp11) {
             // TODO (DK) use features, dont add c++11:  http://de.slideshare.net/DanielPfeifer1/cmake-48475415 page 40
-            this.p(this.forProject(pn, 'if (CMAKE_COMPILER_IS_GNUCXX) target_compile_options(_PID_ PUBLIC -std=c++11) endif()'));
+            this.p(this.forProject(pn, 'if (CMAKE_COMPILER_IS_GNUCXX) target_compile_options(_PID_ PRIVATE -std=c++11) endif()'));
         }
         // target specific defines
         // TODO (DK) this will get compilicated for stuff like mingw on windows?
         switch (platform) {
             case Platform_1.Platform.Windows:
                 {
-                    this.p(this.forProject(pn, 'target_compile_definitions(_PID_ PUBLIC -D_WINSOCK_DEPRECATED_NO_WARNINGS -DWIN32 -D_WINDOWS)'));
-                    this.p(this.forProject(pn, 'target_compile_definitions(_PID_ PUBLIC -DUNICODE -D_UNICODE)'));
+                    this.p(this.forProject(pn, 'target_compile_definitions(_PID_ PRIVATE -D_WINSOCK_DEPRECATED_NO_WARNINGS -DWIN32 -D_WINDOWS)'));
+                    this.p(this.forProject(pn, 'target_compile_definitions(_PID_ PRIVATE -DUNICODE -D_UNICODE)'));
                 }
                 break;
         }
         // defines
         for (let def of project.getDefines()) {
-            this.p(this.forProject(pn, 'target_compile_definitions(_PID_ PUBLIC -D' + def.replace(/\"/g, "\\\"") + ')'));
+            this.p(this.forProject(pn, 'target_compile_definitions(_PID_ PRIVATE -D' + def.replace(/\"/g, "\\\"") + ')'));
         }
         // libraries to link
         for (let lib of project.getLibs()) {
